@@ -28,3 +28,25 @@ else:
         st.write(f"🕒 Published At: {article['publishedAt']}")
         st.markdown(f"[Read Full Article]({article['url']})")
         st.markdown("---")
+# --- GNEWS INTEGRATION ---
+gnews_key = "ccc546ad66ec22944f00818ef829bd8b"
+gnews_url = "https://gnews.io/api/v4/search"
+gnews_params = {
+    "q": "maritime rescue OR coast guard OR search and rescue",
+    "lang": "en",
+    "max": 5,
+    "token": gnews_key
+}
+
+st.markdown("## 📰 Additional Articles from GNews")
+
+gnews_response = requests.get(gnews_url, params=gnews_params)
+if gnews_response.status_code == 200:
+    gnews_articles = gnews_response.json().get("articles", [])
+    for article in gnews_articles:
+        st.subheader(article["title"])
+        st.write(f"🕒 Published At: {article['publishedAt']}")
+        st.markdown(f"[Read Full Article]({article['url']})")
+        st.markdown("---")
+else:
+    st.error(f"GNews API error: {gnews_response.status_code} - {gnews_response.text}")
